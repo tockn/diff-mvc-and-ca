@@ -1,0 +1,29 @@
+version: '3.1'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: diffmvca-mysql
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_DATABASE: diffmvca
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - 3306:3306
+  db_test:
+    image: mysql:8.0
+    container_name: diffmvca-mysql-test
+    restart: always
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_DATABASE: diffmvca_test
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - 3307:3306
+  redis:
+    image: redis:latest
+    container_name: diffmvca
+    restart: always
+    ports:
+      - 6379:6379
