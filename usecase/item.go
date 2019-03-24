@@ -31,10 +31,15 @@ func (i *item) Get(ipt *input.GetItem) (*output.Item, error) {
 	if err != nil {
 		return nil, err
 	}
+	ranking, err := i.itemRepo.GetRankingByID(id)
+	if err != nil {
+		return nil, err
+	}
 	oItem := &output.Item{
-		ID:   ipt.ID,
-		Name: item.Name,
-		Rate: item.Rate,
+		ID:      ipt.ID,
+		Name:    item.Name,
+		Rate:    item.Rate,
+		Ranking: ranking,
 	}
 	return oItem, nil
 }
