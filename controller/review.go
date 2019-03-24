@@ -72,6 +72,19 @@ func (r *Review) New(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, "")
 		return
 	}
-	c.JSON(http.StatusCreated, "")
+
+	idStr, err := model.EncodeID(r.hash, review.ID)
+	if err != nil {
+		log.Println(err)
+		c.JSON(http.StatusInternalServerError, err)
+		return
+	}
+
+	res := &model.ReviewJson{
+		ID:   idStr,
+		Rate: review.Rate,
+	}
+
+	c.JSON(http.StatusCreated, res)
 
 }
