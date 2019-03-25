@@ -11,8 +11,9 @@ import (
 )
 
 type Item struct {
-	db   *gorm.DB
-	hash *hashids.HashID
+	db     *gorm.DB
+	hash   *hashids.HashID
+	logger *log.Logger
 }
 
 func NewItem(db *gorm.DB, hash *hashids.HashID) *Item {
@@ -27,22 +28,19 @@ func (i *Item) Show(c *gin.Context) {
 
 	id, err := model.DecodeID(i.hash, idStr)
 	if err != nil {
-		log.Println(err)
-		c.JSON(http.StatusInternalServerError, "")
+		c.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
 
 	item, err := model.FindOneItem(i.db, id)
 	if err != nil {
-		log.Println(err)
-		c.JSON(http.StatusInternalServerError, "")
+		c.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
 
 	rank, err := model.GetItemRanking(i.db, id)
 	if err != nil {
-		log.Println(err)
-		c.JSON(http.StatusInternalServerError, "")
+		c.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
 
@@ -59,7 +57,6 @@ func (i *Item) Show(c *gin.Context) {
 func (i *Item) New(c *gin.Context) {
 	var itemJson model.ItemJson
 	if err := c.BindJSON(&itemJson); err != nil {
-		c.JSON(http.StatusBadRequest, "")
 		return
 	}
 
@@ -68,9 +65,24 @@ func (i *Item) New(c *gin.Context) {
 		Rate: 0,
 	}
 	if err := item.Insert(i.db); err != nil {
-		log.Println(err)
-		c.JSON(http.StatusInternalServerError, "")
+		c.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
-	c.JSON(http.StatusCreated, "")
+	idStr, err := model.EncodeID(i.hash, item.ID)
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+	rank, err := model.GetItemRanking(i.db, item.ID)
+	if err != nil {
+		c.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+	res := model.ItemJson{
+		ID:      idStr,
+		Name:    item.Name,
+		Rate:    item.Rate,
+		Ranking: rank,
+	}
+	c.JSON(http.StatusCreated, res)
 }
