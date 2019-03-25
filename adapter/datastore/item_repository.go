@@ -48,6 +48,17 @@ WHERE
 	return rank, nil
 }
 
+func (i *item) Save(name string) (*entity.Item, error) {
+	mItem := mysql.Item{
+		Name: name,
+		Rate: 0,
+	}
+	if err := i.db.Create(&mItem).Error; err != nil {
+		return nil, err
+	}
+	return mItem.ToEntity(), nil
+}
+
 func (i *item) UpdateRateByID(id int64, rate float64) (*entity.Item, error) {
 	var mItem mysql.Item
 	if err := i.db.First(&mItem, id).Update("rate", rate).Error; err != nil {

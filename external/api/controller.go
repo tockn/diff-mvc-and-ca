@@ -8,6 +8,7 @@ import (
 
 type Controller interface {
 	GetItem(c *gin.Context)
+	PostItem(c *gin.Context)
 	GetReview(c *gin.Context)
 	PostReview(c *gin.Context)
 }
@@ -30,6 +31,16 @@ func (ctr *controller) GetItem(c *gin.Context) {
 	ctx = addGinContext(ctx, c)
 
 	ctr.it.GetItem(ctx, &ipt)
+}
+
+func (ctr *controller) PostItem(c *gin.Context) {
+	var ipt input.PostItem
+	_ = c.BindJSON(&ipt)
+
+	ctx := c.Request.Context()
+	ctx = addGinContext(ctx, c)
+
+	ctr.it.PostItem(ctx, &ipt)
 }
 
 func (ctr *controller) GetReview(c *gin.Context) {
