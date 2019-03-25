@@ -39,7 +39,7 @@ func (r *Review) Insert(db *gorm.DB) error {
 		return err
 	}
 
-	var sum, count float64
+	var sum, count int64
 	row := db.DB().QueryRow(`
 SELECT
 	SUM(rate), COUNT(*)
@@ -52,10 +52,7 @@ WHERE
 		return err
 	}
 
-	rate, err := CalculateRate(sum, count)
-	if err != nil {
-		return err
-	}
+	rate := CalculateRate(sum, count)
 
 	if err := db.Model(&Item{}).Update("rate", rate).Error; err != nil {
 		return err
@@ -71,7 +68,10 @@ func (r *Review) Validate() bool {
 	return true
 }
 
-func CalculateRate(sum, count float64) (float64, error) {
-	rate := sum / count
-	return rate, nil
+func CalculateRate(sum, count int64) float64 {
+	if count == 0 {
+		return 0
+	}
+	rate := float64(sum) / float64(count)
+	return rate
 }
