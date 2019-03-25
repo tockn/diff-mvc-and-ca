@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -11,9 +10,8 @@ import (
 )
 
 type Item struct {
-	db     *gorm.DB
-	hash   *hashids.HashID
-	logger *log.Logger
+	db   *gorm.DB
+	hash *hashids.HashID
 }
 
 func NewItem(db *gorm.DB, hash *hashids.HashID) *Item {
