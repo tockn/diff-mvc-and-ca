@@ -39,7 +39,20 @@ func (r *Review) Insert(db *gorm.DB) error {
 		return err
 	}
 
-	rate, err := CalcRateByItemID(db, r.ItemID)
+	var sum, count float64
+	row := db.DB().QueryRow(`
+SELECT
+	SUM(rate), COUNT(*)
+FROM
+	reviews 
+WHERE
+	item_id = ?`, r.ItemID)
+
+	if err := row.Scan(&sum, &count); err != nil {
+		return err
+	}
+
+	rate, err := CalculateRate(sum, count)
 	if err != nil {
 		return err
 	}
@@ -58,20 +71,7 @@ func (r *Review) Validate() bool {
 	return true
 }
 
-func CalcRateByItemID(db *gorm.DB, itemID int64) (float64, error) {
-	var sum, count float64
-	row := db.DB().QueryRow(`
-SELECT
-	SUM(rate), COUNT(*)
-FROM
-	reviews 
-WHERE
-	item_id = ?`, itemID)
-
-	if err := row.Scan(&sum, &count); err != nil {
-		return 0, err
-	}
-
+func CalculateRate(sum, count float64) (float64, error) {
 	rate := sum / count
 	return rate, nil
 }
