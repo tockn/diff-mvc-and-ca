@@ -1,6 +1,7 @@
 package model
 
 import (
+	"errors"
 	"time"
 
 	"github.com/jinzhu/gorm"
@@ -29,10 +30,35 @@ func FindOneReview(db *gorm.DB, id int64) (*Review, error) {
 }
 
 func (r *Review) Insert(db *gorm.DB) error {
+
+	if !r.Validate() {
+		return errors.New("validation error")
+	}
+
 	if err := db.Create(r).Error; err != nil {
 		return err
 	}
 
+	rate, err := CalcRateByItemID(db, r.ItemID)
+	if err != nil {
+		return err
+	}
+
+	if err := db.Model(&Item{}).Update("rate", rate).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *Review) Validate() bool {
+	if r.Rate < 1 || 5 < r.Rate {
+		return false
+	}
+	return true
+}
+
+func CalcRateByItemID(db *gorm.DB, itemID int64) (float64, error) {
 	var sum, count float64
 	row := db.DB().QueryRow(`
 SELECT
@@ -40,17 +66,12 @@ SELECT
 FROM
 	reviews 
 WHERE
-	item_id = ?`, r.ItemID)
+	item_id = ?`, itemID)
 
 	if err := row.Scan(&sum, &count); err != nil {
-		return err
+		return 0, err
 	}
 
 	rate := sum / count
-
-	if err := db.Model(&Item{}).Update("rate", rate).Error; err != nil {
-		return err
-	}
-
-	return nil
+	return rate, nil
 }
