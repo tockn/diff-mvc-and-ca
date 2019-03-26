@@ -45,20 +45,31 @@ func (r *review) Get(ipt *input.GetReview) (*output.Review, error) {
 }
 
 func (r *review) Post(ipt *input.PostReview) (*output.Review, error) {
+
+	// バリデーション
 	if err := ipt.Validate(); err != nil {
 		return nil, err
 	}
 
+	// 入力されたレビューデータの商品ハッシュIDを数値IDへ変換
 	itemID, err := r.hashRepo.Decode(ipt.ItemID)
 	if err != nil {
 		return nil, err
 	}
 
+	// 入力されたレビューデータを永続化
 	review, err := r.reviewRepo.Save(ipt.Rate, itemID)
 	if err != nil {
 		return nil, err
 	}
 
+	// 永続化したレビューデータの数値IDをハッシュIDへ変換
+	id, err := r.hashRepo.Encode(review.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	// レビューされた商品のレート更新
 	rate, err := r.itemService.CalcItemRateByID(itemID)
 	if err != nil {
 		return nil, err
@@ -69,10 +80,7 @@ func (r *review) Post(ipt *input.PostReview) (*output.Review, error) {
 		return nil, err
 	}
 
-	id, err := r.hashRepo.Encode(review.ID)
-	if err != nil {
-		return nil, err
-	}
+	// レビュー情報を出力
 	oReview := &output.Review{
 		ID:   id,
 		Rate: review.Rate,
