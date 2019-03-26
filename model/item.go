@@ -6,20 +6,15 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-type ItemJson struct {
-	ID      string  `json:"id"`
-	Name    string  `json:"name"`
-	Rate    float64 `json:"rate"`
-	Ranking int64   `json:"ranking"`
-}
-
 type Item struct {
-	ID        int64
-	Name      string
-	Rate      float64
-	Reviews   []*Review `gorm:"foreignkey:ItemID"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	ID        int64     `json:"-"`
+	HID       string    `json:"id" gorm:"-"`
+	Name      string    `json:"name"`
+	Rate      float64   `json:"rate"`
+	Reviews   []*Review `json:"-" gorm:"foreignkey:ItemID"`
+	Ranking   int64     `json:"-" gorm:"-"`
+	CreatedAt time.Time `json:"-"`
+	UpdatedAt time.Time `json:"-"`
 }
 
 func FindOneItem(db *gorm.DB, id int64) (*Item, error) {
@@ -55,5 +50,6 @@ WHERE
 }
 
 func (i *Item) Insert(db *gorm.DB) error {
+	i.Rate = 0
 	return db.Create(i).Error
 }

@@ -41,30 +41,27 @@ func (r *Review) Show(c *gin.Context) {
 		return
 	}
 
-	res := &model.ReviewJson{
-		ID:     idStr,
-		Rate:   review.Rate,
-		ItemID: itemID,
-	}
-	c.JSON(http.StatusOK, res)
+	review.HID = idStr
+	review.ItemHID = itemID
+	c.JSON(http.StatusOK, review)
 }
 
 func (r *Review) New(c *gin.Context) {
-	var reviewJson model.ReviewJson
-	if err := c.BindJSON(&reviewJson); err != nil {
+	var review model.Review
+	if err := c.BindJSON(&review); err != nil {
 		return
 	}
 
-	itemID, err := model.DecodeID(r.hash, c.Param("itemID"))
+	itemIDStr := c.Param("itemID")
+
+	itemID, err := model.DecodeID(r.hash, itemIDStr)
 	if err != nil {
 		c.AbortWithStatus(http.StatusBadRequest)
 		return
 	}
 
-	review := model.Review{
-		Rate:   reviewJson.Rate,
-		ItemID: itemID,
-	}
+	review.ItemID = itemID
+
 	if err := review.Insert(r.db); err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return
@@ -76,11 +73,8 @@ func (r *Review) New(c *gin.Context) {
 		return
 	}
 
-	res := &model.ReviewJson{
-		ID:   idStr,
-		Rate: review.Rate,
-	}
-
-	c.JSON(http.StatusCreated, res)
+	review.HID = idStr
+	review.ItemHID = itemIDStr
+	c.JSON(http.StatusCreated, review)
 
 }

@@ -7,18 +7,14 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-type ReviewJson struct {
-	ID     string  `json:"id"`
-	Rate   float64 `json:"rate"`
-	ItemID string  `json:"item_id"`
-}
-
 type Review struct {
-	ID        int64
-	Rate      float64
-	ItemID    int64
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	ID        int64     `json:"-"`
+	HID       string    `json:"id" gorm:"-"`
+	Rate      float64   `json:"rate"`
+	ItemID    int64     `json:"-"`
+	ItemHID   string    `json:"item_id" gorm:"-"`
+	CreatedAt time.Time `json:"-"`
+	UpdatedAt time.Time `json:"-"`
 }
 
 func FindOneReview(db *gorm.DB, id int64) (*Review, error) {

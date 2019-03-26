@@ -42,26 +42,18 @@ func (i *Item) Show(c *gin.Context) {
 		return
 	}
 
-	res := &model.ItemJson{
-		ID:      idStr,
-		Name:    item.Name,
-		Rate:    item.Rate,
-		Ranking: rank,
-	}
+	item.HID = idStr
+	item.Ranking = rank
 
-	c.JSON(http.StatusOK, res)
+	c.JSON(http.StatusOK, item)
 }
 
 func (i *Item) New(c *gin.Context) {
-	var itemJson model.ItemJson
-	if err := c.BindJSON(&itemJson); err != nil {
+	var item model.Item
+	if err := c.BindJSON(&item); err != nil {
 		return
 	}
 
-	item := model.Item{
-		Name: itemJson.Name,
-		Rate: 0,
-	}
 	if err := item.Insert(i.db); err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return
@@ -76,11 +68,7 @@ func (i *Item) New(c *gin.Context) {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
-	res := model.ItemJson{
-		ID:      idStr,
-		Name:    item.Name,
-		Rate:    item.Rate,
-		Ranking: rank,
-	}
-	c.JSON(http.StatusCreated, res)
+	item.HID = idStr
+	item.Ranking = rank
+	c.JSON(http.StatusCreated, item)
 }
