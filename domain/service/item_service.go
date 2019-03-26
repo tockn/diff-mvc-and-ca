@@ -25,6 +25,9 @@ func (i *item) CalcItemRateByID(id int64) (float64, error) {
 	if err != nil {
 		return 0, err
 	}
+	if sum == 0 {
+		return 0, nil
+	}
 	rate := float64(count) / float64(sum)
 	return rate, nil
 }
