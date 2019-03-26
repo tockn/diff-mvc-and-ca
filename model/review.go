@@ -29,10 +29,12 @@ func FindOneReview(db *gorm.DB, id int64) (*Review, error) {
 
 func (r *Review) Insert(db *gorm.DB, hash *hashids.HashID) error {
 
+	// バリデーション
 	if err := r.Validate(); err != nil {
 		return err
 	}
 
+	// 入力されたレビューデータの商品ハッシュIDを数値IDへ変換
 	itemID, err := DecodeID(hash, r.ItemHID)
 	if err != nil {
 		return err
@@ -40,10 +42,12 @@ func (r *Review) Insert(db *gorm.DB, hash *hashids.HashID) error {
 
 	r.ItemID = itemID
 
+	// 入力されたレビューデータを永続化
 	if err := db.Create(r).Error; err != nil {
 		return err
 	}
 
+	// 永続化したレビューデータの数値IDをハッシュIDへ変換
 	idStr, err := EncodeID(hash, r.ID)
 	if err != nil {
 		return err
@@ -51,6 +55,7 @@ func (r *Review) Insert(db *gorm.DB, hash *hashids.HashID) error {
 
 	r.HID = idStr
 
+	// レビューされた商品のレート更新
 	var sum, count int64
 	row := db.DB().QueryRow(`
 SELECT
