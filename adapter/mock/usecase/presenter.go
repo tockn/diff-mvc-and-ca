@@ -46,6 +46,18 @@ func (mr *MockPresenterMockRecorder) ViewItem(ctx, item interface{}) *gomock.Cal
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ViewItem", reflect.TypeOf((*MockPresenter)(nil).ViewItem), ctx, item)
 }
 
+// ViewPostItem mocks base method
+func (m *MockPresenter) ViewPostItem(ctx context.Context, item *output.Item) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "ViewPostItem", ctx, item)
+}
+
+// ViewPostItem indicates an expected call of ViewPostItem
+func (mr *MockPresenterMockRecorder) ViewPostItem(ctx, item interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ViewPostItem", reflect.TypeOf((*MockPresenter)(nil).ViewPostItem), ctx, item)
+}
+
 // ViewReview mocks base method
 func (m *MockPresenter) ViewReview(ctx context.Context, review *output.Review) {
 	m.ctrl.T.Helper()
@@ -56,6 +68,18 @@ func (m *MockPresenter) ViewReview(ctx context.Context, review *output.Review) {
 func (mr *MockPresenterMockRecorder) ViewReview(ctx, review interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ViewReview", reflect.TypeOf((*MockPresenter)(nil).ViewReview), ctx, review)
+}
+
+// ViewPostReview mocks base method
+func (m *MockPresenter) ViewPostReview(ctx context.Context, review *output.Review) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "ViewPostReview", ctx, review)
+}
+
+// ViewPostReview indicates an expected call of ViewPostReview
+func (mr *MockPresenterMockRecorder) ViewPostReview(ctx, review interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ViewPostReview", reflect.TypeOf((*MockPresenter)(nil).ViewPostReview), ctx, review)
 }
 
 // ViewError mocks base method

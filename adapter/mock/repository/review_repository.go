@@ -49,18 +49,18 @@ func (mr *MockReviewMockRecorder) FindByID(id interface{}) *gomock.Call {
 }
 
 // Save mocks base method
-func (m *MockReview) Save(rate float64) (*entity.Review, error) {
+func (m *MockReview) Save(rate float64, itemID int64) (*entity.Review, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Save", rate)
+	ret := m.ctrl.Call(m, "Save", rate, itemID)
 	ret0, _ := ret[0].(*entity.Review)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Save indicates an expected call of Save
-func (mr *MockReviewMockRecorder) Save(rate interface{}) *gomock.Call {
+func (mr *MockReviewMockRecorder) Save(rate, itemID interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockReview)(nil).Save), rate)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockReview)(nil).Save), rate, itemID)
 }
 
 // SumOfRateByItemID mocks base method
