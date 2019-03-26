@@ -29,8 +29,8 @@ func FindOneReview(db *gorm.DB, id int64) (*Review, error) {
 
 func (r *Review) Insert(db *gorm.DB, hash *hashids.HashID) error {
 
-	if !r.Validate() {
-		return errors.New("validation error")
+	if err := r.Validate(); err != nil {
+		return err
 	}
 
 	itemID, err := DecodeID(hash, r.ItemHID)
@@ -73,11 +73,11 @@ WHERE
 	return nil
 }
 
-func (r *Review) Validate() bool {
+func (r *Review) Validate() error {
 	if r.Rate < 1 || 5 < r.Rate {
-		return false
+		return errors.New("[Review] Rate validate error")
 	}
-	return true
+	return nil
 }
 
 func CalculateRate(sum, count int64) float64 {
