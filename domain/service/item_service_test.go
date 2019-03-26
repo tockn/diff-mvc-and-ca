@@ -17,7 +17,7 @@ func TestItem_CalcItemRateByID(t *testing.T) {
 		sum      int64
 		expected float64
 	}{
-		{1, 30, 10, 3},
+		{1, 10, 30, 3},
 		{1, 0, 0, 0},
 	}
 
