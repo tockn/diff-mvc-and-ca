@@ -25,9 +25,10 @@ func (r *review) FindByID(id int64) (*entity.Review, error) {
 	return mReview.ToEntity(), nil
 }
 
-func (r *review) Save(rate float64) (*entity.Review, error) {
+func (r *review) Save(rate float64, itemID int64) (*entity.Review, error) {
 	mReview := mysql.Review{
-		Rate: rate,
+		Rate:   rate,
+		ItemID: itemID,
 	}
 	if err := r.db.Create(&mReview).Error; err != nil {
 		return nil, err

@@ -45,12 +45,12 @@ func (r *review) Get(ipt *input.GetReview) (*output.Review, error) {
 }
 
 func (r *review) Post(ipt *input.PostReview) (*output.Review, error) {
-	review, err := r.reviewRepo.Save(ipt.Rate)
+	itemID, err := r.hashRepo.Decode(ipt.ItemID)
 	if err != nil {
 		return nil, err
 	}
 
-	itemID, err := r.hashRepo.Decode(ipt.ItemID)
+	review, err := r.reviewRepo.Save(ipt.Rate, itemID)
 	if err != nil {
 		return nil, err
 	}

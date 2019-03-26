@@ -26,10 +26,22 @@ func (p *presenter) ViewItem(ctx context.Context, item *output.Item) {
 	p.JSON(c, http.StatusOK, item)
 }
 
+func (p *presenter) ViewPostItem(ctx context.Context, item *output.Item) {
+	defer deleteGinContext(ctx)
+	c := getGinContext(ctx)
+	p.JSON(c, http.StatusCreated, item)
+}
+
 func (p *presenter) ViewReview(ctx context.Context, review *output.Review) {
 	defer deleteGinContext(ctx)
 	c := getGinContext(ctx)
 	p.JSON(c, http.StatusOK, review)
+}
+
+func (p *presenter) ViewPostReview(ctx context.Context, review *output.Review) {
+	defer deleteGinContext(ctx)
+	c := getGinContext(ctx)
+	p.JSON(c, http.StatusCreated, review)
 }
 
 func (p *presenter) ViewError(ctx context.Context, err error) {

@@ -37,7 +37,7 @@ func (i *Interactor) PostItem(ctx context.Context, ipt *input.PostItem) {
 		return
 	}
 
-	i.presenter.ViewItem(ctx, item)
+	i.presenter.ViewPostItem(ctx, item)
 }
 
 func (i *Interactor) GetReview(ctx context.Context, ipt *input.GetReview) {
@@ -57,5 +57,5 @@ func (i *Interactor) PostReview(ctx context.Context, ipt *input.PostReview) {
 		return
 	}
 
-	i.presenter.ViewReview(ctx, review)
+	i.presenter.ViewPostReview(ctx, review)
 }
