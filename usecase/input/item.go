@@ -1,7 +1,7 @@
 package input
 
 type GetItem struct {
-	ID string `json:"id"`
+	ID string
 }
 
 type PostItem struct {

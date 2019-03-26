@@ -1,8 +1,8 @@
 package input
 
 type GetReview struct {
-	ID     string `json:"id"`
-	ItemID string `json:"item_id"`
+	ID     string
+	ItemID string
 }
 
 type PostReview struct {
