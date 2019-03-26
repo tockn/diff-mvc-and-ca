@@ -52,29 +52,12 @@ func (r *Review) New(c *gin.Context) {
 		return
 	}
 
-	itemIDStr := c.Param("itemID")
+	review.ItemHID = c.Param("itemID")
 
-	itemID, err := model.DecodeID(r.hash, itemIDStr)
-	if err != nil {
-		c.AbortWithStatus(http.StatusBadRequest)
-		return
-	}
-
-	review.ItemID = itemID
-
-	if err := review.Insert(r.db); err != nil {
+	if err := review.Insert(r.db, r.hash); err != nil {
 		c.AbortWithStatus(http.StatusInternalServerError)
 		return
 	}
 
-	idStr, err := model.EncodeID(r.hash, review.ID)
-	if err != nil {
-		c.AbortWithStatus(http.StatusInternalServerError)
-		return
-	}
-
-	review.HID = idStr
-	review.ItemHID = itemIDStr
 	c.JSON(http.StatusCreated, review)
-
 }

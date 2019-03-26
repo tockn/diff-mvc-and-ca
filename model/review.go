@@ -4,6 +4,8 @@ import (
 	"errors"
 	"time"
 
+	"github.com/speps/go-hashids"
+
 	"github.com/jinzhu/gorm"
 )
 
@@ -25,15 +27,29 @@ func FindOneReview(db *gorm.DB, id int64) (*Review, error) {
 	return &review, nil
 }
 
-func (r *Review) Insert(db *gorm.DB) error {
+func (r *Review) Insert(db *gorm.DB, hash *hashids.HashID) error {
 
 	if !r.Validate() {
 		return errors.New("validation error")
 	}
 
+	itemID, err := DecodeID(hash, r.ItemHID)
+	if err != nil {
+		return err
+	}
+
+	r.ItemID = itemID
+
 	if err := db.Create(r).Error; err != nil {
 		return err
 	}
+
+	idStr, err := EncodeID(hash, r.ID)
+	if err != nil {
+		return err
+	}
+
+	r.HID = idStr
 
 	var sum, count int64
 	row := db.DB().QueryRow(`
