@@ -45,6 +45,10 @@ func (r *review) Get(ipt *input.GetReview) (*output.Review, error) {
 }
 
 func (r *review) Post(ipt *input.PostReview) (*output.Review, error) {
+	if err := ipt.Validate(); err != nil {
+		return nil, err
+	}
+
 	itemID, err := r.hashRepo.Decode(ipt.ItemID)
 	if err != nil {
 		return nil, err
