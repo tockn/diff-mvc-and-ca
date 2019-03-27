@@ -2,8 +2,8 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/tockn/diff-mvc-and-ca/external/api/request"
 	"github.com/tockn/diff-mvc-and-ca/usecase"
-	"github.com/tockn/diff-mvc-and-ca/usecase/input"
 )
 
 type Controller interface {
@@ -24,42 +24,40 @@ type controller struct {
 }
 
 func (ctr *controller) GetItem(c *gin.Context) {
-	var ipt input.GetItem
-	ipt.ID = c.Param("itemID")
+	req := request.GetItem{ID: c.Param("itemID")}
 
 	ctx := c.Request.Context()
 	ctx = addGinContext(ctx, c)
 
-	ctr.it.GetItem(ctx, &ipt)
+	ctr.it.GetItem(ctx, req.ToInput())
 }
 
 func (ctr *controller) PostItem(c *gin.Context) {
-	var ipt input.PostItem
-	_ = c.BindJSON(&ipt)
+	var req request.PostItem
+	_ = c.BindJSON(&req)
 
 	ctx := c.Request.Context()
 	ctx = addGinContext(ctx, c)
 
-	ctr.it.PostItem(ctx, &ipt)
+	ctr.it.PostItem(ctx, req.ToInput())
 }
 
 func (ctr *controller) GetReview(c *gin.Context) {
-	var ipt input.GetReview
-	ipt.ID = c.Param("reviewID")
+	req := request.GetReview{ID: c.Param("reviewID")}
 
 	ctx := c.Request.Context()
 	ctx = addGinContext(ctx, c)
 
-	ctr.it.GetReview(ctx, &ipt)
+	ctr.it.GetReview(ctx, req.ToInput())
 }
 
 func (ctr *controller) PostReview(c *gin.Context) {
-	var ipt input.PostReview
-	_ = c.BindJSON(&ipt)
-	ipt.ItemID = c.Param("itemID")
+	var req request.PostReview
+	_ = c.BindJSON(&req)
+	req.ItemID = c.Param("itemID")
 
 	ctx := c.Request.Context()
 	ctx = addGinContext(ctx, c)
 
-	ctr.it.PostReview(ctx, &ipt)
+	ctr.it.PostReview(ctx, req.ToInput())
 }

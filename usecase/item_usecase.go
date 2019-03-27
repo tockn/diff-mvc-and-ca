@@ -1,8 +1,6 @@
 package usecase
 
 import (
-	"errors"
-
 	"github.com/tockn/diff-mvc-and-ca/domain/repository"
 	"github.com/tockn/diff-mvc-and-ca/usecase/input"
 	"github.com/tockn/diff-mvc-and-ca/usecase/output"
@@ -48,8 +46,8 @@ func (i *item) Get(ipt *input.GetItem) (*output.Item, error) {
 }
 
 func (i *item) Post(ipt *input.PostItem) (*output.Item, error) {
-	if !ipt.Validate() {
-		return nil, errors.New("validation error")
+	if err := ipt.Validate(); err != nil {
+		return nil, err
 	}
 	item, err := i.itemRepo.Save(ipt.Name)
 	if err != nil {

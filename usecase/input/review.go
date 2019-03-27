@@ -8,8 +8,8 @@ type GetReview struct {
 }
 
 type PostReview struct {
-	Rate   float64 `json:"rate"`
-	ItemID string  `json:"item_id"`
+	Rate   float64
+	ItemID string
 }
 
 func (r *PostReview) Validate() error {

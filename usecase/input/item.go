@@ -1,16 +1,18 @@
 package input
 
+import "errors"
+
 type GetItem struct {
 	ID string
 }
 
 type PostItem struct {
-	Name string `json:"name"`
+	Name string
 }
 
-func (p *PostItem) Validate() bool {
+func (p *PostItem) Validate() error {
 	if len(p.Name) < 1 || 25 < len(p.Name) {
-		return false
+		return errors.New("validation error")
 	}
-	return true
+	return nil
 }
