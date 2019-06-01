@@ -5,6 +5,7 @@
 package mock_repository
 
 import (
+	context "context"
 	gomock "github.com/golang/mock/gomock"
 	entity "github.com/tockn/diff-mvc-and-ca/domain/entity"
 	reflect "reflect"
@@ -34,61 +35,61 @@ func (m *MockReview) EXPECT() *MockReviewMockRecorder {
 }
 
 // FindByID mocks base method
-func (m *MockReview) FindByID(id int64) (*entity.Review, error) {
+func (m *MockReview) FindByID(ctx context.Context, id int64) (*entity.Review, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindByID", id)
+	ret := m.ctrl.Call(m, "FindByID", ctx, id)
 	ret0, _ := ret[0].(*entity.Review)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // FindByID indicates an expected call of FindByID
-func (mr *MockReviewMockRecorder) FindByID(id interface{}) *gomock.Call {
+func (mr *MockReviewMockRecorder) FindByID(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByID", reflect.TypeOf((*MockReview)(nil).FindByID), id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByID", reflect.TypeOf((*MockReview)(nil).FindByID), ctx, id)
 }
 
 // Save mocks base method
-func (m *MockReview) Save(rate float64, itemID int64) (*entity.Review, error) {
+func (m *MockReview) Save(ctx context.Context, rate float64, itemID int64) (*entity.Review, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Save", rate, itemID)
+	ret := m.ctrl.Call(m, "Save", ctx, rate, itemID)
 	ret0, _ := ret[0].(*entity.Review)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Save indicates an expected call of Save
-func (mr *MockReviewMockRecorder) Save(rate, itemID interface{}) *gomock.Call {
+func (mr *MockReviewMockRecorder) Save(ctx, rate, itemID interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockReview)(nil).Save), rate, itemID)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockReview)(nil).Save), ctx, rate, itemID)
 }
 
 // SumOfRateByItemID mocks base method
-func (m *MockReview) SumOfRateByItemID(id int64) (int64, error) {
+func (m *MockReview) SumOfRateByItemID(ctx context.Context, id int64) (int64, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "SumOfRateByItemID", id)
+	ret := m.ctrl.Call(m, "SumOfRateByItemID", ctx, id)
 	ret0, _ := ret[0].(int64)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // SumOfRateByItemID indicates an expected call of SumOfRateByItemID
-func (mr *MockReviewMockRecorder) SumOfRateByItemID(id interface{}) *gomock.Call {
+func (mr *MockReviewMockRecorder) SumOfRateByItemID(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SumOfRateByItemID", reflect.TypeOf((*MockReview)(nil).SumOfRateByItemID), id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SumOfRateByItemID", reflect.TypeOf((*MockReview)(nil).SumOfRateByItemID), ctx, id)
 }
 
 // CountByItemID mocks base method
-func (m *MockReview) CountByItemID(id int64) (int64, error) {
+func (m *MockReview) CountByItemID(ctx context.Context, id int64) (int64, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CountByItemID", id)
+	ret := m.ctrl.Call(m, "CountByItemID", ctx, id)
 	ret0, _ := ret[0].(int64)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // CountByItemID indicates an expected call of CountByItemID
-func (mr *MockReviewMockRecorder) CountByItemID(id interface{}) *gomock.Call {
+func (mr *MockReviewMockRecorder) CountByItemID(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CountByItemID", reflect.TypeOf((*MockReview)(nil).CountByItemID), id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CountByItemID", reflect.TypeOf((*MockReview)(nil).CountByItemID), ctx, id)
 }

@@ -1,14 +1,16 @@
 package usecase
 
 import (
+	"context"
+
 	"github.com/tockn/diff-mvc-and-ca/domain/repository"
 	"github.com/tockn/diff-mvc-and-ca/usecase/input"
 	"github.com/tockn/diff-mvc-and-ca/usecase/output"
 )
 
 type Item interface {
-	Get(ipt *input.GetItem) (*output.Item, error)
-	Post(ipt *input.PostItem) (*output.Item, error)
+	Get(ctx context.Context, ipt *input.GetItem) (*output.Item, error)
+	Post(ctx context.Context, ipt *input.PostItem) (*output.Item, error)
 }
 
 type item struct {
@@ -23,16 +25,16 @@ func NewItem(itemRepo repository.Item, hashRepo repository.Hash) Item {
 	}
 }
 
-func (i *item) Get(ipt *input.GetItem) (*output.Item, error) {
-	id, err := i.hashRepo.Decode(ipt.ID)
+func (i *item) Get(ctx context.Context, ipt *input.GetItem) (*output.Item, error) {
+	id, err := i.hashRepo.Decode(ctx, ipt.ID)
 	if err != nil {
 		return nil, err
 	}
-	item, err := i.itemRepo.FindByID(id)
+	item, err := i.itemRepo.FindByID(ctx, id)
 	if err != nil {
 		return nil, err
 	}
-	ranking, err := i.itemRepo.GetRankingByID(id)
+	ranking, err := i.itemRepo.GetRankingByID(ctx, id)
 	if err != nil {
 		return nil, err
 	}
@@ -45,19 +47,19 @@ func (i *item) Get(ipt *input.GetItem) (*output.Item, error) {
 	return oItem, nil
 }
 
-func (i *item) Post(ipt *input.PostItem) (*output.Item, error) {
+func (i *item) Post(ctx context.Context, ipt *input.PostItem) (*output.Item, error) {
 	if err := ipt.Validate(); err != nil {
 		return nil, err
 	}
-	item, err := i.itemRepo.Save(ipt.Name)
+	item, err := i.itemRepo.Save(ctx, ipt.Name)
 	if err != nil {
 		return nil, err
 	}
-	id, err := i.hashRepo.Encode(item.ID)
+	id, err := i.hashRepo.Encode(ctx, item.ID)
 	if err != nil {
 		return nil, err
 	}
-	ranking, err := i.itemRepo.GetRankingByID(item.ID)
+	ranking, err := i.itemRepo.GetRankingByID(ctx, item.ID)
 	if err != nil {
 		return nil, err
 	}

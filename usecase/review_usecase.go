@@ -1,6 +1,8 @@
 package usecase
 
 import (
+	"context"
+
 	"github.com/tockn/diff-mvc-and-ca/domain/repository"
 	"github.com/tockn/diff-mvc-and-ca/domain/service"
 	"github.com/tockn/diff-mvc-and-ca/usecase/input"
@@ -8,8 +10,8 @@ import (
 )
 
 type Review interface {
-	Get(ipt *input.GetReview) (*output.Review, error)
-	Post(ipt *input.PostReview) (*output.Review, error)
+	Get(ctx context.Context, ipt *input.GetReview) (*output.Review, error)
+	Post(ctx context.Context, ipt *input.PostReview) (*output.Review, error)
 }
 
 type review struct {
@@ -28,12 +30,12 @@ func NewReview(reviewRepo repository.Review, itemRepo repository.Item, hashRepo 
 	}
 }
 
-func (r *review) Get(ipt *input.GetReview) (*output.Review, error) {
-	id, err := r.hashRepo.Decode(ipt.ID)
+func (r *review) Get(ctx context.Context, ipt *input.GetReview) (*output.Review, error) {
+	id, err := r.hashRepo.Decode(ctx, ipt.ID)
 	if err != nil {
 		return nil, err
 	}
-	review, err := r.reviewRepo.FindByID(id)
+	review, err := r.reviewRepo.FindByID(ctx, id)
 	if err != nil {
 		return nil, err
 	}
@@ -44,7 +46,7 @@ func (r *review) Get(ipt *input.GetReview) (*output.Review, error) {
 	return oReview, nil
 }
 
-func (r *review) Post(ipt *input.PostReview) (*output.Review, error) {
+func (r *review) Post(ctx context.Context, ipt *input.PostReview) (*output.Review, error) {
 
 	// バリデーション
 	if err := ipt.Validate(); err != nil {
@@ -52,30 +54,30 @@ func (r *review) Post(ipt *input.PostReview) (*output.Review, error) {
 	}
 
 	// 入力されたレビューデータの商品ハッシュIDを数値IDへ変換
-	itemID, err := r.hashRepo.Decode(ipt.ItemID)
+	itemID, err := r.hashRepo.Decode(ctx, ipt.ItemID)
 	if err != nil {
 		return nil, err
 	}
 
 	// 入力されたレビューデータを永続化
-	review, err := r.reviewRepo.Save(ipt.Rate, itemID)
+	review, err := r.reviewRepo.Save(ctx, ipt.Rate, itemID)
 	if err != nil {
 		return nil, err
 	}
 
 	// 永続化したレビューデータの数値IDをハッシュIDへ変換
-	id, err := r.hashRepo.Encode(review.ID)
+	id, err := r.hashRepo.Encode(ctx, review.ID)
 	if err != nil {
 		return nil, err
 	}
 
 	// レビューされた商品のレート更新
-	rate, err := r.itemService.CalcItemRateByID(itemID)
+	rate, err := r.itemService.CalcItemRateByID(ctx, itemID)
 	if err != nil {
 		return nil, err
 	}
 
-	_, err = r.itemRepo.UpdateRateByID(itemID, rate)
+	_, err = r.itemRepo.UpdateRateByID(ctx, itemID, rate)
 	if err != nil {
 		return nil, err
 	}

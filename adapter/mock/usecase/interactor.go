@@ -3,7 +3,3 @@
 
 // Package mock_usecase is a generated GoMock package.
 package mock_usecase
-
-import (
-	gomock "github.com/golang/mock/gomock"
-)

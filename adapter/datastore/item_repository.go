@@ -1,6 +1,9 @@
 package datastore
 
 import (
+	"context"
+
+	"github.com/go-redis/redis"
 	"github.com/jinzhu/gorm"
 	"github.com/tockn/diff-mvc-and-ca/adapter/datastore/mysql"
 	"github.com/tockn/diff-mvc-and-ca/domain/entity"
@@ -9,16 +12,18 @@ import (
 
 // Implement repository.Item
 type item struct {
-	db *gorm.DB
+	db      *gorm.DB
+	redisDB *redis.Client
 }
 
-func NewItem(db *gorm.DB) repository.Item {
+func NewItem(db *gorm.DB, red *redis.Client) repository.Item {
 	return &item{
-		db: db,
+		db:      db,
+		redisDB: red,
 	}
 }
 
-func (i *item) FindByID(id int64) (*entity.Item, error) {
+func (i *item) FindByID(ctx context.Context, id int64) (*entity.Item, error) {
 	var mItem mysql.Item
 	if err := i.db.First(&mItem, id).Error; err != nil {
 		return nil, err
@@ -26,7 +31,7 @@ func (i *item) FindByID(id int64) (*entity.Item, error) {
 	return mItem.ToEntity(), nil
 }
 
-func (i *item) GetRankingByID(id int64) (int64, error) {
+func (i *item) GetRankingByID(ctx context.Context, id int64) (int64, error) {
 	var mItem mysql.Item
 	if err := i.db.Select("rate").First(&mItem, id).Error; err != nil {
 		return 0, err
@@ -48,7 +53,7 @@ WHERE
 	return rank, nil
 }
 
-func (i *item) Save(name string) (*entity.Item, error) {
+func (i *item) Save(ctx context.Context, name string) (*entity.Item, error) {
 	mItem := mysql.Item{
 		Name: name,
 		Rate: 0,
@@ -59,7 +64,7 @@ func (i *item) Save(name string) (*entity.Item, error) {
 	return mItem.ToEntity(), nil
 }
 
-func (i *item) UpdateRateByID(id int64, rate float64) (*entity.Item, error) {
+func (i *item) UpdateRateByID(ctx context.Context, id int64, rate float64) (*entity.Item, error) {
 	var mItem mysql.Item
 	if err := i.db.First(&mItem, id).Update("rate", rate).Error; err != nil {
 		return nil, err

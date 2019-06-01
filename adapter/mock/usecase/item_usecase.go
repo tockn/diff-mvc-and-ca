@@ -5,6 +5,7 @@
 package mock_usecase
 
 import (
+	context "context"
 	gomock "github.com/golang/mock/gomock"
 	input "github.com/tockn/diff-mvc-and-ca/usecase/input"
 	output "github.com/tockn/diff-mvc-and-ca/usecase/output"
@@ -35,31 +36,31 @@ func (m *MockItem) EXPECT() *MockItemMockRecorder {
 }
 
 // Get mocks base method
-func (m *MockItem) Get(ipt *input.GetItem) (*output.Item, error) {
+func (m *MockItem) Get(ctx context.Context, ipt *input.GetItem) (*output.Item, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Get", ipt)
+	ret := m.ctrl.Call(m, "Get", ctx, ipt)
 	ret0, _ := ret[0].(*output.Item)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Get indicates an expected call of Get
-func (mr *MockItemMockRecorder) Get(ipt interface{}) *gomock.Call {
+func (mr *MockItemMockRecorder) Get(ctx, ipt interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockItem)(nil).Get), ipt)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockItem)(nil).Get), ctx, ipt)
 }
 
 // Post mocks base method
-func (m *MockItem) Post(ipt *input.PostItem) (*output.Item, error) {
+func (m *MockItem) Post(ctx context.Context, ipt *input.PostItem) (*output.Item, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Post", ipt)
+	ret := m.ctrl.Call(m, "Post", ctx, ipt)
 	ret0, _ := ret[0].(*output.Item)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Post indicates an expected call of Post
-func (mr *MockItemMockRecorder) Post(ipt interface{}) *gomock.Call {
+func (mr *MockItemMockRecorder) Post(ctx, ipt interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Post", reflect.TypeOf((*MockItem)(nil).Post), ipt)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Post", reflect.TypeOf((*MockItem)(nil).Post), ctx, ipt)
 }

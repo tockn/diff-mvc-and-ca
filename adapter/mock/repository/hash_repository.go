@@ -5,6 +5,7 @@
 package mock_repository
 
 import (
+	context "context"
 	gomock "github.com/golang/mock/gomock"
 	reflect "reflect"
 )
@@ -33,31 +34,31 @@ func (m *MockHash) EXPECT() *MockHashMockRecorder {
 }
 
 // Encode mocks base method
-func (m *MockHash) Encode(id int64) (string, error) {
+func (m *MockHash) Encode(ctx context.Context, id int64) (string, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Encode", id)
+	ret := m.ctrl.Call(m, "Encode", ctx, id)
 	ret0, _ := ret[0].(string)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Encode indicates an expected call of Encode
-func (mr *MockHashMockRecorder) Encode(id interface{}) *gomock.Call {
+func (mr *MockHashMockRecorder) Encode(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Encode", reflect.TypeOf((*MockHash)(nil).Encode), id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Encode", reflect.TypeOf((*MockHash)(nil).Encode), ctx, id)
 }
 
 // Decode mocks base method
-func (m *MockHash) Decode(idStr string) (int64, error) {
+func (m *MockHash) Decode(ctx context.Context, idStr string) (int64, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Decode", idStr)
+	ret := m.ctrl.Call(m, "Decode", ctx, idStr)
 	ret0, _ := ret[0].(int64)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Decode indicates an expected call of Decode
-func (mr *MockHashMockRecorder) Decode(idStr interface{}) *gomock.Call {
+func (mr *MockHashMockRecorder) Decode(ctx, idStr interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Decode", reflect.TypeOf((*MockHash)(nil).Decode), idStr)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Decode", reflect.TypeOf((*MockHash)(nil).Decode), ctx, idStr)
 }

@@ -12,9 +12,9 @@ func (r *registry) NewItemUsecase() usecase.Item {
 }
 
 func (r *registry) NewItemService() service.Item {
-	return service.NewItem(r.NewReviewRepository())
+	return service.NewItem(r.NewItemRepository(), r.NewReviewRepository())
 }
 
 func (r *registry) NewItemRepository() repository.Item {
-	return datastore.NewItem(r.db)
+	return datastore.NewItem(r.db, r.redisDB)
 }

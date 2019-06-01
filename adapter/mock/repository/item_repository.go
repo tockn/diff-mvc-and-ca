@@ -5,6 +5,7 @@
 package mock_repository
 
 import (
+	context "context"
 	gomock "github.com/golang/mock/gomock"
 	entity "github.com/tockn/diff-mvc-and-ca/domain/entity"
 	reflect "reflect"
@@ -34,61 +35,61 @@ func (m *MockItem) EXPECT() *MockItemMockRecorder {
 }
 
 // FindByID mocks base method
-func (m *MockItem) FindByID(id int64) (*entity.Item, error) {
+func (m *MockItem) FindByID(ctx context.Context, id int64) (*entity.Item, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FindByID", id)
+	ret := m.ctrl.Call(m, "FindByID", ctx, id)
 	ret0, _ := ret[0].(*entity.Item)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // FindByID indicates an expected call of FindByID
-func (mr *MockItemMockRecorder) FindByID(id interface{}) *gomock.Call {
+func (mr *MockItemMockRecorder) FindByID(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByID", reflect.TypeOf((*MockItem)(nil).FindByID), id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FindByID", reflect.TypeOf((*MockItem)(nil).FindByID), ctx, id)
 }
 
 // Save mocks base method
-func (m *MockItem) Save(name string) (*entity.Item, error) {
+func (m *MockItem) Save(ctx context.Context, name string) (*entity.Item, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Save", name)
+	ret := m.ctrl.Call(m, "Save", ctx, name)
 	ret0, _ := ret[0].(*entity.Item)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Save indicates an expected call of Save
-func (mr *MockItemMockRecorder) Save(name interface{}) *gomock.Call {
+func (mr *MockItemMockRecorder) Save(ctx, name interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockItem)(nil).Save), name)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Save", reflect.TypeOf((*MockItem)(nil).Save), ctx, name)
 }
 
 // GetRankingByID mocks base method
-func (m *MockItem) GetRankingByID(id int64) (int64, error) {
+func (m *MockItem) GetRankingByID(ctx context.Context, id int64) (int64, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetRankingByID", id)
+	ret := m.ctrl.Call(m, "GetRankingByID", ctx, id)
 	ret0, _ := ret[0].(int64)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // GetRankingByID indicates an expected call of GetRankingByID
-func (mr *MockItemMockRecorder) GetRankingByID(id interface{}) *gomock.Call {
+func (mr *MockItemMockRecorder) GetRankingByID(ctx, id interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetRankingByID", reflect.TypeOf((*MockItem)(nil).GetRankingByID), id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetRankingByID", reflect.TypeOf((*MockItem)(nil).GetRankingByID), ctx, id)
 }
 
 // UpdateRateByID mocks base method
-func (m *MockItem) UpdateRateByID(id int64, rate float64) (*entity.Item, error) {
+func (m *MockItem) UpdateRateByID(ctx context.Context, id int64, rate float64) (*entity.Item, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "UpdateRateByID", id, rate)
+	ret := m.ctrl.Call(m, "UpdateRateByID", ctx, id, rate)
 	ret0, _ := ret[0].(*entity.Item)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // UpdateRateByID indicates an expected call of UpdateRateByID
-func (mr *MockItemMockRecorder) UpdateRateByID(id, rate interface{}) *gomock.Call {
+func (mr *MockItemMockRecorder) UpdateRateByID(ctx, id, rate interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateRateByID", reflect.TypeOf((*MockItem)(nil).UpdateRateByID), id, rate)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateRateByID", reflect.TypeOf((*MockItem)(nil).UpdateRateByID), ctx, id, rate)
 }

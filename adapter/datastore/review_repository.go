@@ -1,6 +1,8 @@
 package datastore
 
 import (
+	"context"
+
 	"github.com/jinzhu/gorm"
 	"github.com/tockn/diff-mvc-and-ca/adapter/datastore/mysql"
 	"github.com/tockn/diff-mvc-and-ca/domain/entity"
@@ -17,7 +19,7 @@ func NewReview(db *gorm.DB) repository.Review {
 	}
 }
 
-func (r *review) FindByID(id int64) (*entity.Review, error) {
+func (r *review) FindByID(ctx context.Context, id int64) (*entity.Review, error) {
 	var mReview mysql.Review
 	if err := r.db.First(&mReview, id).Error; err != nil {
 		return nil, err
@@ -25,7 +27,7 @@ func (r *review) FindByID(id int64) (*entity.Review, error) {
 	return mReview.ToEntity(), nil
 }
 
-func (r *review) Save(rate float64, itemID int64) (*entity.Review, error) {
+func (r *review) Save(ctx context.Context, rate float64, itemID int64) (*entity.Review, error) {
 	mReview := mysql.Review{
 		Rate:   rate,
 		ItemID: itemID,
@@ -36,7 +38,7 @@ func (r *review) Save(rate float64, itemID int64) (*entity.Review, error) {
 	return mReview.ToEntity(), nil
 }
 
-func (r *review) SumOfRateByItemID(id int64) (int64, error) {
+func (r *review) SumOfRateByItemID(ctx context.Context, id int64) (int64, error) {
 	var sum int64
 	row := r.db.DB().QueryRow(`
 SELECT
@@ -51,7 +53,7 @@ WHERE
 	return sum, nil
 }
 
-func (r *review) CountByItemID(id int64) (int64, error) {
+func (r *review) CountByItemID(ctx context.Context, id int64) (int64, error) {
 	var count int64
 	row := r.db.DB().QueryRow(`
 SELECT

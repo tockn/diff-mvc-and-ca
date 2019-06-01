@@ -4,6 +4,8 @@ import (
 	"log"
 	"os"
 
+	"github.com/go-redis/redis"
+
 	"github.com/gin-gonic/gin"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jinzhu/gorm"
@@ -26,9 +28,14 @@ func main() {
 		log.Fatal(err)
 	}
 
+	red, err := openRedis()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	logger := log.New(os.Stdout, "diffmvca", log.Ltime)
 
-	r := registry.NewRegistry(db, hash, logger)
+	r := registry.NewRegistry(db, hash, logger, red)
 	controller := r.NewController()
 	server := newServer()
 	api.NewRouter(server, controller)
@@ -50,4 +57,12 @@ func openDB() (*gorm.DB, error) {
 
 func newServer() *gin.Engine {
 	return gin.Default()
+}
+
+func openRedis() (*redis.Client, error) {
+	redisDB := redis.NewClient(&redis.Options{
+		Addr: "127.0.0.1:6379",
+	})
+	_, err := redisDB.Ping().Result()
+	return redisDB, err
 }

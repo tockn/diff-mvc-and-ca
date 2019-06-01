@@ -21,7 +21,7 @@ func NewInteractor(pre Presenter, item Item, review Review) Interactor {
 }
 
 func (i *Interactor) GetItem(ctx context.Context, ipt *input.GetItem) {
-	item, err := i.item.Get(ipt)
+	item, err := i.item.Get(ctx, ipt)
 	if err != nil {
 		i.presenter.ViewError(ctx, err)
 		return
@@ -31,7 +31,7 @@ func (i *Interactor) GetItem(ctx context.Context, ipt *input.GetItem) {
 }
 
 func (i *Interactor) PostItem(ctx context.Context, ipt *input.PostItem) {
-	item, err := i.item.Post(ipt)
+	item, err := i.item.Post(ctx, ipt)
 	if err != nil {
 		i.presenter.ViewError(ctx, err)
 		return
@@ -41,7 +41,7 @@ func (i *Interactor) PostItem(ctx context.Context, ipt *input.PostItem) {
 }
 
 func (i *Interactor) GetReview(ctx context.Context, ipt *input.GetReview) {
-	review, err := i.review.Get(ipt)
+	review, err := i.review.Get(ctx, ipt)
 	if err != nil {
 		i.presenter.ViewError(ctx, err)
 		return
@@ -51,7 +51,7 @@ func (i *Interactor) GetReview(ctx context.Context, ipt *input.GetReview) {
 }
 
 func (i *Interactor) PostReview(ctx context.Context, ipt *input.PostReview) {
-	review, err := i.review.Post(ipt)
+	review, err := i.review.Post(ctx, ipt)
 	if err != nil {
 		i.presenter.ViewError(ctx, err)
 		return

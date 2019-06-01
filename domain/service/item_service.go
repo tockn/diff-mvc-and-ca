@@ -1,27 +1,33 @@
 package service
 
-import "github.com/tockn/diff-mvc-and-ca/domain/repository"
+import (
+	"context"
+
+	"github.com/tockn/diff-mvc-and-ca/domain/repository"
+)
 
 type Item interface {
-	CalcItemRateByID(id int64) (float64, error)
+	CalcItemRateByID(ctx context.Context, id int64) (float64, error)
 }
 
 type item struct {
+	itemRepo   repository.Item
 	reviewRepo repository.Review
 }
 
-func NewItem(reviewRepo repository.Review) Item {
+func NewItem(itemRepo repository.Item, reviewRepo repository.Review) Item {
 	return &item{
+		itemRepo:   itemRepo,
 		reviewRepo: reviewRepo,
 	}
 }
 
-func (i *item) CalcItemRateByID(id int64) (float64, error) {
-	count, err := i.reviewRepo.CountByItemID(id)
+func (i *item) CalcItemRateByID(ctx context.Context, id int64) (float64, error) {
+	count, err := i.reviewRepo.CountByItemID(ctx, id)
 	if err != nil {
 		return 0, err
 	}
-	sum, err := i.reviewRepo.SumOfRateByItemID(id)
+	sum, err := i.reviewRepo.SumOfRateByItemID(ctx, id)
 	if err != nil {
 		return 0, err
 	}
@@ -30,4 +36,7 @@ func (i *item) CalcItemRateByID(id int64) (float64, error) {
 	}
 	rate := float64(sum) / float64(count)
 	return rate, nil
+}
+
+func (i *item) UpdateRanking() {
 }
